@@ -94,7 +94,10 @@ def song_links(album_url):
 def song_lyrics(url):
     soup = scrape(url)
     divs = soup.body.find_all('div')
+    text = None
     for div in divs:
+        if div.has_attr('class'):
+            pass
         if div.has_attr('class') and u'l_title' in div['class']:
             raw = div.get_text()
             meta = (raw.strip()[:-7]).split(' ' + u'\u2013' + ' ')
@@ -106,6 +109,9 @@ def song_lyrics(url):
             text = div.get_text().strip()
             text = uni_to_ascii(text)
             break
+
+    if text is None:
+        text = 'Lyrics Missing - Likely for licencing reasons'
 
     return [meta, text + '\n']
 
