@@ -6,18 +6,11 @@ import os
 
 
 def main():
-    artists = [
-                ['Paolo Nutini'],
-                ['James Blunt'],
-                ['Billie Holiday'],
-                ['Electric Light Orchestra'],
-              ]
+    artists = input_from_file()
 
     for i in range(len(artists)):
         if len(artists[i]) == 1:
-            artists[i].append('https://lyricsfreak.com/' +
-                              artists[i][0][0].lower() + '/' +
-                              artists[i][0].replace(' ', '+').lower())
+            artists[i] = guess_url(artists[i][0])
 
     count = 1
     for artist in artists:
@@ -43,10 +36,37 @@ def main():
                 save(artist[0], album[0], lyrics[0][1], lyrics[1])
 
 
+def input_from_file():
+    FILENAME = 'input.txt'
+
+    with open(FILENAME, 'r') as f:
+        raw = f.readlines()
+
+    artists = []
+    out = []
+    for line in raw:
+        artists.append(line.split(','))
+        out.append([])
+        for i in artists[-1]:
+            out[-1].append(i.strip('\n').strip(' '))
+
+    return out
+
+
 def scrape(url):
     data_object = requests.get(url)
     content = data_object.text
     return BeautifulSoup(content, features='html5lib')
+
+
+def guess_url(artist):
+    root = 'https://www.lyricsfreak.com/'
+    if artist[:4] == 'The ':
+        start = 4
+    else:
+        start = 0
+    return [artist, root + artist[start].lower() + '/'
+            + artist[start:].lower().replace(' ', '+')]
 
 
 def save(artist, album, title, lyrics):
