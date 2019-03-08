@@ -6,11 +6,18 @@ import os
 
 
 def main():
-    artists = [['Blondie', 'https://www.lyricsfreak.com/b/blondie/'],
-               ['Crowded House',
-                'https://www.lyricsfreak.com/c/crowded+house/'],
-               ['David Bowie', 'https://www.lyricsfreak.com/d/david+bowie/'],
-               ['Dire Straits', 'https://www.lyricsfreak.com/d/dire+straits/']]
+    artists = [
+                ['Paolo Nutini'],
+                ['James Blunt'],
+                ['Billie Holiday'],
+                ['Electric Light Orchestra'],
+              ]
+
+    for i in range(len(artists)):
+        if len(artists[i]) == 1:
+            artists[i].append('https://lyricsfreak.com/' +
+                              artists[i][0][0].lower() + '/' +
+                              artists[i][0].replace(' ', '+').lower())
 
     count = 1
     for artist in artists:
@@ -46,6 +53,7 @@ def save(artist, album, title, lyrics):
     artist = artist.replace(' ', '-')
     album = album.replace(' ', '-')
     title = title.replace(' ', '-')
+    title = title.replace('/', '\\')
 
     if not os.path.exists('lyrics'):
         os.mkdir('lyrics')
