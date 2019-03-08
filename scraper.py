@@ -70,10 +70,14 @@ def guess_url(artist):
 
 
 def save(artist, album, title, lyrics):
-    artist = artist.replace(' ', '-')
-    album = album.replace(' ', '-')
-    title = title.replace(' ', '-')
-    title = title.replace('/', '\\')
+    replacements = [(' ', '-'), ('/', '\\')]
+    elements = [artist, album, title]
+    for i in range(len(elements)):
+        for r in replacements:
+            elements[i] = elements[i].replace(r[0], r[1])
+    artist = elements[0]
+    album = elements[1]
+    title = elements[2]
 
     if not os.path.exists('lyrics'):
         os.mkdir('lyrics')
